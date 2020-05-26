@@ -1,12 +1,14 @@
 const Koa = require('koa')
+
 const app = new Koa()
 
 const fs = require('fs')
-const PNG = require('pngjs').PNG
+const { PNG } = require('pngjs')
 
 const cors = require('koa2-cors')
 
 const Router = require('koa-router')
+
 const router = new Router()
 
 const server = require('http').createServer(app.callback())
@@ -15,11 +17,12 @@ const io = require('socket.io')(server)
 const WIDTH = 10
 const HEIGHT = 10
 
-const shuffle = (a) => {
+const shuffle = (array) => {
+  const a = array
   let j
   let x
   let i
-  for (i = a.length - 1; i > 0; i--) {
+  for (i = a.length - 1; i > 0; i -= 1) {
     j = Math.floor(Math.random() * (i + 1))
     x = a[i]
     a[i] = a[j]
@@ -53,8 +56,7 @@ const png2DB = (png) => {
   return colors
 }
 
-const png = getPNG()
-let db = png2DB(png)
+const db = png2DB(getPNG())
 
 let freeRow = shuffle([...Array(WIDTH * HEIGHT).keys()])
 
