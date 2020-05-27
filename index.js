@@ -126,9 +126,9 @@ client.on('connection', (socket) => {
     }
   })
 
-  socket.on('color', ({ color: { r, g, b }, column, row }, cb) => {
+  socket.on('color', ({ color: { r, g, b, alpha }, column, row }, cb) => {
     const index = Number(row * WIDTH) + Number(column)
-    const color = [r, g, b, 255]
+    const color = [r, g, b, alpha]
     db[index] = color
     canvas.emit('colorChange', { color, column, row })
     cb()
