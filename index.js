@@ -1,3 +1,4 @@
+require('dotenv').config()
 const Koa = require('koa')
 
 const app = new Koa()
@@ -144,7 +145,14 @@ app.use(async (ctx, next) => {
   }
 })
 
-app.use(cors()).use(router.routes()).use(router.allowedMethods())
+app
+  .use(
+    cors({
+      origin: process.env.FRONTEND_ADDRESS,
+    })
+  )
+  .use(router.routes())
+  .use(router.allowedMethods())
 
 server.listen(3000)
 

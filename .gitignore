@@ -109,3 +109,4 @@ dist
 # "DB"
 canvas.png
 snapshots/
+.env
