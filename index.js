@@ -122,6 +122,7 @@ canvas.on('connect', (socket) => {
       for (let index = 0; index < db.length; index += 1) {
         db[index] = [0, 0, 0, 0]
       }
+      canvas.emit('welcome', { db, width: WIDTH, height: HEIGHT })
       cb(db)
     } else {
       cb('Not allowed')
