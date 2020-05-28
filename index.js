@@ -94,16 +94,38 @@ canvas.on('connect', (socket) => {
   socket.emit('welcome', { db, width: WIDTH, height: HEIGHT })
   socket.emit('userCount', users.length)
 
-  socket.on('save', (img) => {
-    const data = img.replace('data:image/png;base64,', '')
-    const buf = Buffer.from(data, 'base64')
-    if (!fs.existsSync('snapshots')) {
-      fs.mkdirSync('snapshots')
+  socket.on('save', (img, cb) => {
+    if (
+      socket.handshake.query.token &&
+      socket.handshake.query.token === process.env.API_SECRET
+    ) {
+      const data = img.replace('data:image/png;base64,', '')
+      const buf = Buffer.from(data, 'base64')
+      if (!fs.existsSync('snapshots')) {
+        fs.mkdirSync('snapshots')
+      }
+      fs.writeFileSync(
+        `./snapshots/${Math.floor(new Date().getTime() / 1000)}.png`,
+        buf
+      )
+      cb('Saved')
+    } else {
+      cb('Not allowed')
     }
-    fs.writeFileSync(
-      `./snapshots/${Math.floor(new Date().getTime() / 1000)}.png`,
-      buf
-    )
+  })
+
+  socket.on('reset', (cb) => {
+    if (
+      socket.handshake.query.token &&
+      socket.handshake.query.token === process.env.API_SECRET
+    ) {
+      for (let index = 0; index < db.length; index += 1) {
+        db[index] = [0, 0, 0, 0]
+      }
+      cb(db)
+    } else {
+      cb('Not allowed')
+    }
   })
 })
 
