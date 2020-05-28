@@ -123,7 +123,7 @@ canvas.on('connect', (socket) => {
         db[index] = [0, 0, 0, 0]
       }
       canvas.emit('welcome', { db, width: WIDTH, height: HEIGHT })
-      cb(db)
+      cb('Reset')
     } else {
       cb('Not allowed')
     }
